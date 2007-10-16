@@ -3,7 +3,7 @@
 Plugin Name: Email Obfuscator
 Plugin URI: http://paxoo.com/wp-emob
 Description: Based on <a href="http://macromates.com/blog/2007/obfuscating-emails-revisited/">Allan Odgaard's Ruby script</a> for TextMate, this plugin will automatically make any detected email address within posts and comments harder for spam harvesters to detect.
-Version: 1.0
+Version: 1.1
 License: GPL
 Author: Billy Halsey
 Author URI: http://paxoo.com
@@ -19,7 +19,7 @@ Author URI: http://paxoo.com
 
 function emob_hexify_mailto($mailto)
 {
-    $m = str_ireplace('mailto:', '', $mailto);
+    $m = preg_replace('/mailto:/', '', $mailto);
     $hexified = '';
     for ($i=0; $i < strlen($m); $i++) { 
         $hexified .= '%' . strtoupper(base_convert(ord($m[$i]), 10, 16));
@@ -44,6 +44,7 @@ function emob_readable_mail($address)
 
 function emob_obfusc_mail($address)
 {
+    // Requires: PHP >= 4.2.0
     return str_rot13($address);
 }
 
